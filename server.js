@@ -1,19 +1,26 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var PORT = process.env.PORT || 3000;
-var todos = [{
-	id: 1,
-	description: 'go to the grocery store',
-	completed: false
-},{
-	id: 2,
-	description: 'call tua sorella',
-	completed: false
-},{
-	id: 3,
-	description: 'call tua mamma',
-	completed: true
-}];
+// var todos = [{
+// 	id: 1,
+// 	description: 'go to the grocery store',
+// 	completed: false
+// },{
+// 	id: 2,
+// 	description: 'call tua sorella!',
+// 	completed: false
+// },{
+// 	id: 3,
+// 	description: 'call tua mamma',
+// 	completed: true
+// }];
+var todos = [];
+var todoNextId = 1;
+
+app.use(bodyParser.json());
+
+
 
 app.get('/', function (req, res) {
 	res.send('Todo API Root');
@@ -43,7 +50,35 @@ app.get('/todos/:id', function (req,res) {
 	// res.send('Asking for todos with id of ' + req.params.id);
 });
 
+app.post('/todos', function (req, res) {
+	var body = req.body;
+
+	// ---- course solution ----
+	body.id = todoNextId ++;
+	todos.push(body);
+
+
+	// ----- my solution -----
+	// var todo = {
+	// 	id: todoNextId,
+	// 	description: body.description,
+	// 	completed: body.completed
+	// };
+
+	// todos.push(todo),
+
+	// todoNextId ++;
+
+	console.log('description: ' + body.description);
+
+	res.json(body);
+});
+
 
 app.listen(PORT, function () {
 	console.log('Express listening on port ' + PORT);
 });
+
+
+
+
